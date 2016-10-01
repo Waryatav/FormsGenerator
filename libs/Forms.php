@@ -122,23 +122,15 @@ class Forms
      * @param bool|integer|array $value
      * @param $data
      * @param bool|array $options
-     * @param $label
      * @return string
      */
-    public function radiobuttonsList($name, $value = false, $data, $options = false, $label = true)
+    public function radiobuttonsList($name, $value = false, $data, $options = false)
     {
         $op = $this->getOptions($options);
         $html = '';
-        //in_array()
-        $lb_open = "";
-        $lb_close = "";
-        if ($label) {
-            $lb_open = "<label>";
-            $lb_close  = "</label>";
-        }
         foreach ($data as $key => $val) {
             $ch = (in_array($key, $value)) ? 'checked' : '';
-            $html .= "$lb_open  <input name='" . $name . "[]' $ch type='radio' value='$key' $op>$val $lb_close";
+            $html .= "<input name='" . $name . "[]' $ch type='radio' value='$key' $op>$val";
         }
         return $html;
     }
@@ -171,7 +163,7 @@ class Forms
      * @param $options array
      * @return string
      */
-    public function getOptions($options)
+    private function getOptions($options)
     {
         $op = '';
         if ($options) {
@@ -195,5 +187,19 @@ class Forms
             $arr[$item[$key]] = $item[$value];
         }
         return $arr;
+    }
+
+    public function createForm($data){
+        $html = '';
+        if(!empty($data)){
+            $html .= $this->begin(['id'=>$data['id'],'class'=>$data['class']],$data['method'],$data['action']);
+            foreach($data['items'] as $item){
+                if($item['type'] == 'text'){
+                    $html .= $this->inputText($item['name'], $item['value'],['id'=>$item['id'], 'class'=>$item['class'],'placeholder'=>$item['placeholder']]);
+                }
+            }
+            $html .= $this->end();
+        }
+        return $html;
     }
 }
