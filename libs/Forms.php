@@ -195,7 +195,17 @@ class Forms
             $html .= $this->begin(['id'=>$data['id'],'class'=>$data['class']],$data['method'],$data['action']);
             foreach($data['items'] as $item){
                 if($item['type'] == 'text'){
-                    $html .= $this->inputText($item['name'], $item['value'],['id'=>$item['id'], 'class'=>$item['class'],'placeholder'=>$item['placeholder']]);
+
+                    //$html .= $this->inputText($item['name'], $item['value'],['id'=>$item['id'], 'class'=>$item['class'],'placeholder'=>$item['placeholder']]);
+                    $html .= $this->inputText($item['name'], $item['value'],$item['options']);
+                }elseif ($item['type']=='dropDownList'){
+                    $html .= $this->dropDownList( $item['name'],$item['selected'] , $item['data'],$item['options']);
+                }elseif ($item['type']=='radiobuttonsList'){
+                    $html .= $this->radiobuttonsList( $item['name'],$item['value'],$item['data'] , $item['options']);
+                }elseif ($item['type']=='checkboxList'){
+                    $html .= $this->checkboxList( $item['name'], $item['value'], $item['data'],$item['options'] );
+                }else{
+                    $html .= $this->input($item['type'],$item['name'],$item['value'],$item['options']);
                 }
             }
             $html .= $this->end();
